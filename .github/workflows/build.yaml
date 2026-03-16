@@ -77,3 +77,7 @@ jobs:
             -append 'dummyfirstarg vfs.fstab=[ "initrd0:/:extract::ramfs=1:" "fs9p:/data:9pfs:::mkmp" ] -- /prog /data' \
             -initrd initrd.cpio \
             -virtfs local,path="$PWD",mount_tag=fs9p,security_model=none
+      - name: Compile checks
+        run: |
+          gcc -c checks.c
+        if: ${{ always() }}
