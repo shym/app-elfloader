@@ -32,7 +32,7 @@ env:
 
 jobs:
   test:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04-arm
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -43,14 +43,10 @@ jobs:
           mkdir -p $HOME/.local/bin
           cd $HOME/.local/bin
           tag=$(gh -R unikraft/kraftkit release list -L 1 --exclude-pre-releases --exclude-drafts --json tagName | jq -r '.[0]|.tagName')
-          wget --no-verbose https://github.com/unikraft/kraftkit/releases/download/${tag}/kraft_${tag#v}_linux_amd64.tar.gz
+          wget --no-verbose https://github.com/unikraft/kraftkit/releases/download/${tag}/kraft_${tag#v}_linux_arm64.tar.gz
           tar xvaf *.tar.gz
           rm *.tar.gz
           echo "$PWD" >> "$GITHUB_PATH"
-      - name: Install QEMU etc.
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y qemu-system-arm gcc-aarch64-linux-gnu
       - name: Build
         run: |
           kraft build --target qemu/arm64
@@ -63,8 +59,12 @@ jobs:
         run: |
           printf %s "$SIMPLE_APP" > prog.c
           set -x
-          aarch64-linux-gnu-gcc -fPIC -Wall -static-pie prog.c -o prog
+          gcc -fPIC -Wall -static-pie prog.c -o prog
           echo prog | cpio -o -H newc > initrd.cpio
+      - name: Install QEMU
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qemu-system-arm
       - name: Run the unikernel
         run: |
           set -x
@@ -79,5 +79,5 @@ jobs:
             -virtfs local,path="$PWD",mount_tag=fs9p,security_model=none
       - name: Compile checks
         run: |
-          aarch64-linux-gnu-gcc -c checks.c
+          gcc -c checks.c
         if: ${{ always() }}
