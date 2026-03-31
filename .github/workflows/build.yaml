@@ -49,7 +49,9 @@ jobs:
           echo "$PWD" >> "$GITHUB_PATH"
       - name: Build
         run: |
+          set -x
           kraft build --target qemu/arm64
+          cp .unikraft/build/elfloader_qemu-arm64 kernel
       - name: Display the configuration
         run: |
           set -x
@@ -65,11 +67,99 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y qemu-system-arm
-      - name: Run the unikernel
+      - name: Run the unikernel (1)
         run: |
           set -x
-          cp .unikraft/build/elfloader_qemu-arm64 kernel
-          ls -al /dev/kvm* || true
+          qemu-system-aarch64 -nographic -nodefaults -serial stdio \
+            -machine virt -cpu max \
+            -m 64 \
+            -kernel kernel \
+            -append 'dummyfirstarg vfs.fstab=[ "initrd0:/:extract::ramfs=1:" "fs9p:/data:9pfs:::mkmp" ] -- /prog /data' \
+            -initrd initrd.cpio \
+            -virtfs local,path="$PWD",mount_tag=fs9p,security_model=none
+      - name: Run the unikernel (2)
+        run: |
+          set -x
+          qemu-system-aarch64 -nographic -nodefaults -serial stdio \
+            -machine virt -cpu max \
+            -m 64 \
+            -kernel kernel \
+            -append 'dummyfirstarg vfs.fstab=[ "initrd0:/:extract::ramfs=1:" "fs9p:/data:9pfs:::mkmp" ] -- /prog /data' \
+            -initrd initrd.cpio \
+            -virtfs local,path="$PWD",mount_tag=fs9p,security_model=none
+      - name: Run the unikernel (3)
+        run: |
+          set -x
+          qemu-system-aarch64 -nographic -nodefaults -serial stdio \
+            -machine virt -cpu max \
+            -m 64 \
+            -kernel kernel \
+            -append 'dummyfirstarg vfs.fstab=[ "initrd0:/:extract::ramfs=1:" "fs9p:/data:9pfs:::mkmp" ] -- /prog /data' \
+            -initrd initrd.cpio \
+            -virtfs local,path="$PWD",mount_tag=fs9p,security_model=none
+      - name: Run the unikernel (4)
+        run: |
+          set -x
+          qemu-system-aarch64 -nographic -nodefaults -serial stdio \
+            -machine virt -cpu max \
+            -m 64 \
+            -kernel kernel \
+            -append 'dummyfirstarg vfs.fstab=[ "initrd0:/:extract::ramfs=1:" "fs9p:/data:9pfs:::mkmp" ] -- /prog /data' \
+            -initrd initrd.cpio \
+            -virtfs local,path="$PWD",mount_tag=fs9p,security_model=none
+      - name: Run the unikernel (5)
+        run: |
+          set -x
+          qemu-system-aarch64 -nographic -nodefaults -serial stdio \
+            -machine virt -cpu max \
+            -m 64 \
+            -kernel kernel \
+            -append 'dummyfirstarg vfs.fstab=[ "initrd0:/:extract::ramfs=1:" "fs9p:/data:9pfs:::mkmp" ] -- /prog /data' \
+            -initrd initrd.cpio \
+            -virtfs local,path="$PWD",mount_tag=fs9p,security_model=none
+      - name: Run the unikernel (6)
+        run: |
+          set -x
+          qemu-system-aarch64 -nographic -nodefaults -serial stdio \
+            -machine virt -cpu max \
+            -m 64 \
+            -kernel kernel \
+            -append 'dummyfirstarg vfs.fstab=[ "initrd0:/:extract::ramfs=1:" "fs9p:/data:9pfs:::mkmp" ] -- /prog /data' \
+            -initrd initrd.cpio \
+            -virtfs local,path="$PWD",mount_tag=fs9p,security_model=none
+      - name: Run the unikernel (7)
+        run: |
+          set -x
+          qemu-system-aarch64 -nographic -nodefaults -serial stdio \
+            -machine virt -cpu max \
+            -m 64 \
+            -kernel kernel \
+            -append 'dummyfirstarg vfs.fstab=[ "initrd0:/:extract::ramfs=1:" "fs9p:/data:9pfs:::mkmp" ] -- /prog /data' \
+            -initrd initrd.cpio \
+            -virtfs local,path="$PWD",mount_tag=fs9p,security_model=none
+      - name: Run the unikernel (8)
+        run: |
+          set -x
+          qemu-system-aarch64 -nographic -nodefaults -serial stdio \
+            -machine virt -cpu max \
+            -m 64 \
+            -kernel kernel \
+            -append 'dummyfirstarg vfs.fstab=[ "initrd0:/:extract::ramfs=1:" "fs9p:/data:9pfs:::mkmp" ] -- /prog /data' \
+            -initrd initrd.cpio \
+            -virtfs local,path="$PWD",mount_tag=fs9p,security_model=none
+      - name: Run the unikernel (9)
+        run: |
+          set -x
+          qemu-system-aarch64 -nographic -nodefaults -serial stdio \
+            -machine virt -cpu max \
+            -m 64 \
+            -kernel kernel \
+            -append 'dummyfirstarg vfs.fstab=[ "initrd0:/:extract::ramfs=1:" "fs9p:/data:9pfs:::mkmp" ] -- /prog /data' \
+            -initrd initrd.cpio \
+            -virtfs local,path="$PWD",mount_tag=fs9p,security_model=none
+      - name: Run the unikernel (10)
+        run: |
+          set -x
           qemu-system-aarch64 -nographic -nodefaults -serial stdio \
             -machine virt -cpu max \
             -m 64 \
